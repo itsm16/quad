@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDetailsModal, useApi } from '../store/features/uiSlice';
 import { deleteTodo } from '../store/features/todoSlice';
 
-function Card({ title = "title", desc = "desc", id, api }) {
+function Card({ title = "title", desc = "Check (get place details) and create todo, now click on show details in the card for minimap and city details", id, api }) {
   const dispatch = useDispatch();
   const uiStore = useSelector(state => state.ui.ui);
   const showModal = uiStore.showDetails;
@@ -28,7 +28,7 @@ function Card({ title = "title", desc = "desc", id, api }) {
 
         {/* Title & Description */}
         <div className='flex flex-col'>
-          <h3 className="text-white font-semibold text-lg">{title}</h3>
+          <h3 className="text-white font-semibold text-xs">{title}</h3>
           <p className='text-gray-300 text-xs hover:text-white w-full break-words overflow-hidden text-ellipsis'>
             {desc}
           </p>
