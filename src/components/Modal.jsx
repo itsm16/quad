@@ -7,10 +7,9 @@ import { addTodo } from "../store/features/todoSlice";
 
 function Modal() {
   const [error, setError] = useState(false);
-  const [check, setCheck] = useState(false);
+  const [place, setPlace] = useState(false);
   const dispatch = useDispatch();
-  const todos = useSelector(state => state.todo.todos);
-  console.log("tl", todos)
+  const todos = useSelector((state) => state.todo.todos);
   const showModal = useSelector((state) => state.ui.ui.addModal);
 
   const {
@@ -18,18 +17,20 @@ function Modal() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      city: "",
+    },
+  });
 
   function onSubmit(data) {
     const { title, desc } = data;
 
-    // Zod schema for validation
     const schema = z.object({
       title: z.string().min(3, { message: "Title is too short" }),
       desc: z.string().min(5, { message: "Description is too short" }).max(210, { message: "Description is too long" }),
     });
 
-    // Validate data using Zod
     const check = schema.safeParse(data);
 
     if (!check.success) {
@@ -38,16 +39,29 @@ function Modal() {
     }
 
     setError(false);
-    console.log("Form Submitted:", { data, type: "general" });
-    dispatch(addTodo({ id: todos.length + 1, title: data.title, desc: data.desc, type: "general" }));
+    console.log("Form Submitted:", {
+      data,
+      type: place ? "place-details" : "general",
+    });
+
+    const newTodo = {
+      id: todos.length + 1,
+      title: data.title,
+      desc: data.desc,
+      api: place ? { type: "visit", city: data.city } : { type: "general" },
+    };
+
+    dispatch(addTodo(newTodo));
+    localStorage.setItem("localTodos", JSON.stringify([...todos, newTodo]));
+
     dispatch(setModal());
-    reset(); // Reset form after successful submission
+    reset(); 
   }
 
   return (
     <div className={`modal ${showModal ? "modal-open" : ""}`}>
       <div className="md:w-[500px] md:min-h-[50%] p-4 border border-gray-700/50 bg-black/10 backdrop-blur-sm rounded-xl">
-        {/* Close Button */}
+
         <div className="flex justify-end">
           <button
             onClick={() => dispatch(setModal())}
@@ -57,10 +71,10 @@ function Modal() {
           </button>
         </div>
 
-        {/* Form */}
+
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
           <div className="my-2 mx-3 flex flex-col gap-4 text-white">
-            {/* Title Input */}
+        
             <input
               {...register("title", { required: "Title is required" })}
               placeholder="Title"
@@ -69,7 +83,7 @@ function Modal() {
             />
             {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
 
-            {/* Description Textarea */}
+         
             <textarea
               {...register("desc", { required: "Description is required" })}
               placeholder="Description"
@@ -77,20 +91,30 @@ function Modal() {
             />
             {errors.desc && <span className="text-red-500 text-sm">{errors.desc.message}</span>}
 
-            <label htmlFor="">
-              Places API
-            <input onClick={()=>setCheck(!check)} className={`checkbox ${check ? `checked:bg-white checked:text-black` : ``}`} type="checkbox" />
-            </label>
-            {/* Category Select */}
-            {
-              check ?
-              <select className="w-fit bg-inherit select border focus:bg-black border-white/70 rounded-md text-white">
-                <option className="bg-black" value="">General</option>
-                <option {...register("city")}>Delhi</option>
-                <option {...register("city")}>Jabalpur</option>
+            {/* Toggle Place Details */}
+            <div className="flex gap-2 items-center">
+              <div>Get place details</div>
+              <input
+                onClick={() => setPlace((prev) => !prev)}
+                checked={place}
+                className="checkbox checkbox-sm bg-black text-black checked:bg-white checked:text-black"
+                type="checkbox"
+              />
+            </div>
+
+         
+            {place && (
+              <select
+                {...register("city")}
+                className="w-fit bg-inherit select border focus:bg-black border-white/70 rounded-md text-white"
+              >
+                <option className="bg-black" value="">Select City</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Glasgow">Glasgow</option>
+                <option value="Jabalpur">Jabalpur</option>
               </select>
-              : ""
-            }
+            )}
 
             {/* Submit Button */}
             <div className="flex justify-end">

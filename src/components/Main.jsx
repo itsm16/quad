@@ -16,6 +16,7 @@ function Main() {
               key={ele.id}
               title={ele.title}
               desc={ele.desc}
+              api={ele.api}
             />
           )) 
         }

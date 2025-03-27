@@ -42,15 +42,13 @@ const todoSlice = createSlice({
             localTodos = localTodos.filter(ele => ele.id !== payload.id);
             localStorage.setItem("localTodos", JSON.stringify(localTodos));
         },
-        useApi: ()=>{
-            
-        }
+        
         
         
 
     }
 })
 
-export const { setTodos, addTodo, deleteTodo } = todoSlice.actions;
+export const { setTodos, addTodo, deleteTodo} = todoSlice.actions;
 
 export default todoSlice.reducer;
