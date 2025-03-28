@@ -95,8 +95,9 @@ function Modal() {
             <div className="flex gap-2 items-center">
               <div>Get place details</div>
               <input
-                onClick={() => setPlace((prev) => !prev)}
+                
                 checked={place}
+                onChange={() => setPlace((prev) => !prev)}
                 className="checkbox checkbox-sm bg-black text-black checked:bg-white checked:text-black"
                 type="checkbox"
               />

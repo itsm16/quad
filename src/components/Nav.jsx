@@ -49,7 +49,7 @@ function Nav() {
               <li className='py-2 pl-2'>Name : {store.name}</li>
               <li className='py-2 pl-2'>Email : {store.email}</li>
               <li onClick={handleLogout} className=' font-semibold backdrop-blur-xs pl-2 py-1 hover:bg-black hover:text-white'>Logout</li>
-              <li className='py-1 pl-2 text-red-500' onClick={deleteAcc}>Delete Account</li>
+              <li className='py-1 pl-2 font-semibold text-red-500' onClick={deleteAcc}>Delete Account</li>
             </ul>
           </div>
         </div>

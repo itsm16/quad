@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { setEmpty } from "./todoSlice";
 
 export const userSlice = createSlice({
     name: "user",
@@ -42,7 +43,9 @@ export const userSlice = createSlice({
         rmAccount: (state)=>{ 
             state.user.name = null;
             state.user.email = null;
-            localStorage.clear()
+            setEmpty();
+            localStorage.clear();
+            
         }
 
         
